@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useCreateTodo } from "@/store/todos";
+import { useCreateTodo } from "@/hooks/queries/use-todo-list";
 import { useState } from "react";
 
 export default function TodoEditor() {
   const [content, setContent] = useState("");
-  const createTodo = useCreateTodo();
+  const { mutate: createTodo, isPending } = useCreateTodo();
 
   const handleAddItem = () => {
     if (content.trim() === "") return;
@@ -20,7 +20,9 @@ export default function TodoEditor() {
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />
-      <Button onClick={handleAddItem}>추가</Button>
+      <Button onClick={handleAddItem} disabled={isPending}>
+        추가
+      </Button>
     </div>
   );
 }
