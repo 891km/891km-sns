@@ -1,23 +1,47 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { useLoginWithPassword } from "@/hooks/mutations/use-login-with-password";
 import { useLoginWithOAuth } from "@/hooks/mutations/use-login-with-oauth";
 import { Button } from "@/components/ui/button";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import githubLogo from "@/assets/github-mark.svg";
+import { toast } from "sonner";
+import { getAuthErrorMessageKo } from "@/lib/error-code-ko";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { mutate: loginWithPassword } = useLoginWithPassword();
-  const { mutate: loginWithOAuth } = useLoginWithOAuth();
+
+  const { mutate: loginWithPassword, isPending: isLoginWithPasswordPending } =
+    useLoginWithPassword({
+      onError: (error) => {
+        const message = getAuthErrorMessageKo(error);
+        toast.error(message, {
+          position: "top-center",
+        });
+        setEmail("");
+        setPassword("");
+      },
+      onSuccess: () => {
+        navigate("/");
+      },
+    });
+
+  const { mutate: loginWithOAuth, isPending: isLoginWithOAuthPending } =
+    useLoginWithOAuth({
+      onError: (error) => {
+        const message = getAuthErrorMessageKo(error);
+        toast.error(message, {
+          position: "top-center",
+        });
+      },
+    });
 
   const handleLoginWithPasswordClick = () => {
-    if (email.trim() === "" || password.trim() === "") return;
+    if (isEmptyInput) return;
     loginWithPassword({ email, password });
-
-    setEmail("");
-    setPassword("");
   };
 
   const handleLoginWithGithubClick = () => {
@@ -25,11 +49,17 @@ export default function LoginPage() {
   };
 
   const handleLoginWithTestClick = () => {
-    window.alert("아직 제공하지 않는 서비스입니다.");
+    loginWithPassword({
+      email: "test@test.com",
+      password: "123456",
+    });
   };
 
+  const isEmptyInput = !email.trim() || !password.trim();
+  const isLoginPending = isLoginWithPasswordPending || isLoginWithOAuthPending;
+
   return (
-    <div className="mx-auto flex max-w-sm flex-col gap-8">
+    <div className="mx-auto flex max-w-sm flex-col gap-8 pb-20">
       <h2 className="pt-6 text-center text-xl font-bold">로그인</h2>
       <div className="flex flex-col gap-4">
         <FloatingLabelInput
@@ -37,19 +67,21 @@ export default function LoginPage() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          disabled={isLoginPending}
         />
         <FloatingLabelInput
           label="비밀번호"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          disabled={isLoginPending}
         />
         <Button
           className="w-full py-6"
-          disabled={email.trim() === "" || password.trim() === ""}
           onClick={handleLoginWithPasswordClick}
+          disabled={isEmptyInput || isLoginPending}
         >
-          로그인
+          {isLoginWithPasswordPending ? <Spinner /> : "로그인"}
         </Button>
       </div>
       <div className="flex flex-col gap-4">

@@ -1,25 +1,38 @@
 import { Button } from "@/components/ui/button";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
+import { Spinner } from "@/components/ui/spinner";
 import { useSignupWithPassword } from "@/hooks/mutations/use-signup-with-password";
+import { getAuthErrorMessageKo } from "@/lib/error-code-ko";
 import { useState } from "react";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 export default function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { mutate: signupWithPassword } = useSignupWithPassword();
+
+  const { mutate: signupWithPassword, isPending: isSignupPending } =
+    useSignupWithPassword({
+      onError: (error) => {
+        const message = getAuthErrorMessageKo(error);
+        toast.error(message, {
+          position: "top-center",
+        });
+
+        setEmail("");
+        setPassword("");
+      },
+    });
 
   const handleSignupWithPasswordClick = () => {
-    if (email.trim() === "") return;
-    if (password.trim() === "") return;
-
+    if (isEmptyInput) return;
     signupWithPassword({ email, password });
-    setEmail("");
-    setPassword("");
   };
 
+  const isEmptyInput = !email.trim() || !password.trim();
+
   return (
-    <div className="mx-auto flex max-w-sm flex-col gap-8">
+    <div className="mx-auto flex max-w-sm flex-col gap-8 pb-20">
       <h2 className="pt-6 text-center text-xl font-bold">회원가입</h2>
       <div className="flex flex-col gap-4">
         <FloatingLabelInput
@@ -27,19 +40,21 @@ export default function SignupPage() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          disabled={isSignupPending}
         />
         <FloatingLabelInput
           label="비밀번호"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          disabled={isSignupPending}
         />
         <Button
           className="w-full py-6"
           onClick={handleSignupWithPasswordClick}
-          disabled={email.trim() === "" || password.trim() === ""}
+          disabled={isEmptyInput || isSignupPending}
         >
-          회원가입
+          {isSignupPending ? <Spinner /> : "회원가입"}
         </Button>
       </div>
 
