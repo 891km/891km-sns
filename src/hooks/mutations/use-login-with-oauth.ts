@@ -5,10 +5,9 @@ import { useMutation } from "@tanstack/react-query";
 export const useLoginWithOAuth = (callback?: UseMutationCallback) => {
   return useMutation({
     mutationFn: loginWithOAuth,
-    onError: (error) => {
-      if (callback?.onError) {
-        callback.onError(error);
-      }
-    },
+    onError: (error) => callback?.onError?.(error),
+    onSuccess: () => callback?.onSuccess?.(),
+    onMutate: () => callback?.onMutate?.(),
+    onSettled: () => callback?.onSettled?.(),
   });
 };

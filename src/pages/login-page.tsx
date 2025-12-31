@@ -8,6 +8,7 @@ import githubLogo from "@/assets/github-mark.svg";
 import { toast } from "sonner";
 import { getAuthErrorMessageKo } from "@/lib/error-code-ko";
 import { Spinner } from "@/components/ui/spinner";
+import { ROUTES } from "@/constants/routes";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -18,14 +19,12 @@ export default function LoginPage() {
     useLoginWithPassword({
       onError: (error) => {
         const message = getAuthErrorMessageKo(error);
-        toast.error(message, {
-          position: "top-center",
-        });
+        toast.error(message);
         setEmail("");
         setPassword("");
       },
       onSuccess: () => {
-        navigate("/");
+        navigate(ROUTES.HOME);
       },
     });
 
@@ -33,9 +32,7 @@ export default function LoginPage() {
     useLoginWithOAuth({
       onError: (error) => {
         const message = getAuthErrorMessageKo(error);
-        toast.error(message, {
-          position: "top-center",
-        });
+        toast.error(message);
       },
     });
 
@@ -61,6 +58,7 @@ export default function LoginPage() {
   return (
     <div className="mx-auto flex max-w-sm flex-col gap-8 pb-20">
       <h2 className="pt-6 text-center text-xl font-bold">로그인</h2>
+
       <div className="flex flex-col gap-4">
         <FloatingLabelInput
           label="이메일"
@@ -83,7 +81,21 @@ export default function LoginPage() {
         >
           {isLoginWithPasswordPending ? <Spinner /> : "로그인"}
         </Button>
+        <Link
+          to="/forgot-password"
+          className="line-height mx-auto text-sm text-black hover:underline"
+        >
+          비밀번호를 잊어버리셨나요?
+        </Link>
       </div>
+
+      <div className="text-muted-foreground mx-auto flex items-center gap-2">
+        아직 계정이 없다면?
+        <Link to="/signup" className="text-black hover:underline">
+          회원가입
+        </Link>
+      </div>
+
       <div className="flex flex-col gap-4">
         <div className="text-muted-foreground before:text-border after:text-border flex items-center justify-center gap-2 text-sm before:flex-1 before:border-t before:content-[''] after:flex-1 after:border-t after:content-['']">
           또는
@@ -105,13 +117,6 @@ export default function LoginPage() {
             테스트 계정으로 로그인
           </Button>
         </div>
-      </div>
-
-      <div className="text-muted-foreground flex flex-col items-center gap-1">
-        아직 계정이 없다면?
-        <Link to="/signup" className="text-black hover:font-semibold">
-          회원가입
-        </Link>
       </div>
     </div>
   );

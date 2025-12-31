@@ -1,10 +1,10 @@
-import { signupWithPassword } from "@/api/auth";
+import { updatePassword } from "@/api/auth";
 import type { UseMutationCallback } from "@/types/types";
 import { useMutation } from "@tanstack/react-query";
 
-export const useSignupWithPassword = (callback?: UseMutationCallback) => {
+export const useUpdatePassword = (callback?: UseMutationCallback) => {
   return useMutation({
-    mutationFn: signupWithPassword,
+    mutationFn: updatePassword,
     onError: (error) => callback?.onError?.(error),
     onSuccess: () => callback?.onSuccess?.(),
     onMutate: () => callback?.onMutate?.(),

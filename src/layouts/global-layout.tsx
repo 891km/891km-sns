@@ -20,7 +20,7 @@ export default function GlobalLayout() {
         >
           <Link to={"/"} className={cn(flexRowCenter, "gap-2")}>
             <img className="h-5" src={logo} alt="" />
-            <div className="font-bold">민주 로그</div>
+            <h1 className="font-bold">민주 로그</h1>
           </Link>
 
           <div className={cn(flexRowCenter, "gap-5")}>

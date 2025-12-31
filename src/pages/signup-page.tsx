@@ -15,9 +15,7 @@ export default function SignupPage() {
     useSignupWithPassword({
       onError: (error) => {
         const message = getAuthErrorMessageKo(error);
-        toast.error(message, {
-          position: "top-center",
-        });
+        toast.error(message);
 
         setEmail("");
         setPassword("");
@@ -34,6 +32,7 @@ export default function SignupPage() {
   return (
     <div className="mx-auto flex max-w-sm flex-col gap-8 pb-20">
       <h2 className="pt-6 text-center text-xl font-bold">회원가입</h2>
+
       <div className="flex flex-col gap-4">
         <FloatingLabelInput
           label="이메일"
@@ -58,9 +57,9 @@ export default function SignupPage() {
         </Button>
       </div>
 
-      <div className="text-muted-foreground flex flex-col items-center gap-1">
+      <div className="text-muted-foreground mx-auto flex items-center gap-2">
         이미 계정이 있다면?
-        <Link to="/login" className="text-black hover:font-semibold">
+        <Link to="/login" className="text-black hover:underline">
           로그인
         </Link>
       </div>
