@@ -3,6 +3,7 @@ import { SunIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
 import defaultProfile from "@/assets/default-profile.png";
 import { cn } from "@/lib/utils";
+import { ROUTES } from "@/constants/routes";
 
 const container = "mx-auto w-full max-w-3xl px-4";
 
@@ -18,7 +19,7 @@ export default function GlobalLayout() {
         <div
           className={cn(container, flexRowCenter, "h-15 justify-between px-4")}
         >
-          <Link to={"/"} className={cn(flexRowCenter, "gap-2")}>
+          <Link to={ROUTES.HOME} className={cn(flexRowCenter, "gap-2")}>
             <img className="h-5" src={logo} alt="" />
             <h1 className="font-bold">민주 로그</h1>
           </Link>
@@ -32,7 +33,7 @@ export default function GlobalLayout() {
                 className="h-full w-full object-cover"
                 src={defaultProfile}
                 alt="유저 프로필"
-              />{" "}
+              />
             </button>
           </div>
         </div>

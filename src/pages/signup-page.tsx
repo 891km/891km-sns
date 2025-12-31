@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { FloatingLabelInput } from "@/components/ui/floating-label-input";
 import { Spinner } from "@/components/ui/spinner";
+import { ROUTES } from "@/constants/routes";
 import { useSignupWithPassword } from "@/hooks/mutations/use-signup-with-password";
 import { getAuthErrorMessageKo } from "@/lib/error-code-ko";
 import { useState } from "react";
@@ -59,7 +60,7 @@ export default function SignupPage() {
 
       <div className="text-muted-foreground mx-auto flex items-center gap-2">
         이미 계정이 있다면?
-        <Link to="/login" className="text-black hover:underline">
+        <Link to={ROUTES.LOGIN} className="text-black hover:underline">
           로그인
         </Link>
       </div>

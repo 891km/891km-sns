@@ -82,7 +82,7 @@ export default function LoginPage() {
           {isLoginWithPasswordPending ? <Spinner /> : "로그인"}
         </Button>
         <Link
-          to="/forgot-password"
+          to={ROUTES.FORGOT_PASSWORD}
           className="line-height mx-auto text-sm text-black hover:underline"
         >
           비밀번호를 잊어버리셨나요?
@@ -91,7 +91,7 @@ export default function LoginPage() {
 
       <div className="text-muted-foreground mx-auto flex items-center gap-2">
         아직 계정이 없다면?
-        <Link to="/signup" className="text-black hover:underline">
+        <Link to={ROUTES.SIGNUP} className="text-black hover:underline">
           회원가입
         </Link>
       </div>
