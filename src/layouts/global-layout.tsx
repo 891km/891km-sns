@@ -4,6 +4,7 @@ import logo from "@/assets/logo.png";
 import defaultProfile from "@/assets/default-profile.png";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/constants/routes";
+import { useSession } from "@/store/session";
 
 const container = "mx-auto w-full max-w-3xl px-4";
 
@@ -13,6 +14,9 @@ const headerActionButton =
   "hover:bg-muted flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full";
 
 export default function GlobalLayout() {
+  const session = useSession();
+  const currentUserId = session?.user.id;
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="border-b">
@@ -28,13 +32,18 @@ export default function GlobalLayout() {
             <button className={headerActionButton} aria-label="테마 변경">
               <SunIcon className="h-6 w-6" />
             </button>
-            <button className={headerActionButton}>
-              <img
-                className="h-full w-full object-cover"
-                src={defaultProfile}
-                alt="유저 프로필"
-              />
-            </button>
+            {currentUserId && (
+              <Link
+                className={headerActionButton}
+                to={ROUTES.PROFILE_DETAIL.replace(":userId", currentUserId)}
+              >
+                <img
+                  className="h-full w-full object-cover"
+                  src={defaultProfile}
+                  alt="유저 프로필"
+                />
+              </Link>
+            )}
           </div>
         </div>
       </header>

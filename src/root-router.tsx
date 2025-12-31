@@ -7,7 +7,7 @@ import IndexPage from "@/pages/index-page";
 import LoginPage from "@/pages/login-page";
 import NotFoundPage from "@/pages/not-found-page";
 import PostDetailPage from "@/pages/post-detail-page";
-import ProfilePage from "@/pages/profile-page";
+import ProfileDetailPage from "@/pages/profile-detail-page";
 import ResetPasswordPage from "@/pages/reset-password-page";
 import SignupPage from "@/pages/signup-page";
 import { Route, Routes } from "react-router";
@@ -28,7 +28,7 @@ export default function RootRouter() {
         <Route element={<UserOnlyLayout />}>
           <Route path={ROUTES.HOME} element={<IndexPage />} />
           <Route path={ROUTES.POST_DETAIL} element={<PostDetailPage />} />
-          <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
+          <Route path={ROUTES.PROFILE_DETAIL} element={<ProfileDetailPage />} />
           <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
         </Route>
 

@@ -7,5 +7,5 @@ export const ROUTES = {
   RESET_PASSWORD: "/reset-password",
 
   POST_DETAIL: "/post/:postId",
-  PROFILE: "/profile/:userId",
+  PROFILE_DETAIL: "/profile/:userId",
 } as const;
