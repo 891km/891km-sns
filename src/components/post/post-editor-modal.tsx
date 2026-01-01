@@ -123,7 +123,7 @@ export default function PostEditorModal() {
       <DialogContent className="flex max-h-[90vh] min-h-80 flex-col">
         <DialogHeader className="gap-8">
           <DialogTitle className="sm:text-center">포스트 작성</DialogTitle>
-          <ProfileInfo userId={userId!} variant="post" />
+          <ProfileInfo userId={userId!} variant="post-edit" />
           <DialogDescription className="sr-only">
             글을 입력하고 이미지를 첨부해 게시물을 작성할 수 있습니다.
           </DialogDescription>

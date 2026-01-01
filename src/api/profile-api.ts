@@ -1,7 +1,7 @@
 import supabase from "@/lib/supabase";
 import { getRandomNickname } from "@/lib/utils";
 
-export async function fetchProfileData(userId: string) {
+export async function fetchProfile(userId: string) {
   const { data, error } = await supabase
     .from("profile")
     .select("*")
@@ -12,7 +12,7 @@ export async function fetchProfileData(userId: string) {
   return data;
 }
 
-export async function createProfileData(userId: string) {
+export async function createProfile(userId: string) {
   const { data, error } = await supabase
     .from("profile")
     .insert({

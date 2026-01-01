@@ -1,5 +1,5 @@
-import AppLoader from "@/components/ui/app-loader";
-import { useFetchProfileData } from "@/hooks/queries/use-fetch-profile-data";
+import AppLoader from "@/components/status/app-loader";
+import { useFetchProfile } from "@/hooks/queries/use-fetch-profile";
 import supabase from "@/lib/supabase";
 import {
   useSetSession,
@@ -13,7 +13,7 @@ export default function SessionProvider({ children }: { children: ReactNode }) {
   const setSession = useSetSession();
   const isSessionLoaded = useIsSessionLoaded();
 
-  const { isLoading: isProfileLoading } = useFetchProfileData(userId);
+  const { isLoading: isProfileLoading } = useFetchProfile(userId);
 
   useEffect(() => {
     supabase.auth.onAuthStateChange((_event, session) => {
