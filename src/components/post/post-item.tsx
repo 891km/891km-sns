@@ -17,6 +17,7 @@ export default function PostItem({ post }: { post: PostWithAuthor }) {
   const userId = useSessionUserId();
   const isCurrentUserPost = post.author_id === userId;
   const LIMIT_CONTENT_LENGTH = 180;
+
   const [isExtended, setIsExtensed] = useState(
     Boolean(post.content.length < LIMIT_CONTENT_LENGTH),
   );
