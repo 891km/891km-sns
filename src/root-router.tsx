@@ -26,12 +26,12 @@ export default function RootRouter() {
         </Route>
 
         <Route element={<UserOnlyLayout />}>
-          <Route path={ROUTES.HOME} element={<IndexPage />} />
-          <Route path={ROUTES.POST_DETAIL} element={<PostDetailPage />} />
           <Route path={ROUTES.PROFILE_DETAIL} element={<ProfileDetailPage />} />
           <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
         </Route>
 
+        <Route path={ROUTES.HOME} element={<IndexPage />} />
+        <Route path={ROUTES.POST_DETAIL} element={<PostDetailPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

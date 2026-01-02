@@ -73,7 +73,7 @@ export default function PostItem({ postId }: { postId: number }) {
               <Ellipsis />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="text-muted-foreground">
+          <DropdownMenuContent align="end">
             <DropdownMenuItem className="h-9">
               <SharePostButton postId={postId} />
             </DropdownMenuItem>

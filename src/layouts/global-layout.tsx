@@ -1,10 +1,11 @@
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, useNavigate } from "react-router";
 import { SunIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
 import defaultProfile from "@/assets/default-profile.png";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/constants/routes";
 import { useSessionUserId } from "@/store/session";
+import { Button } from "@/components/ui/button";
 
 const container = "mx-auto w-full max-w-3xl px-4";
 
@@ -14,14 +15,18 @@ const headerActionButton =
   "hover:bg-muted flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full";
 
 export default function GlobalLayout() {
+  const navigate = useNavigate();
   const currentUserId = useSessionUserId();
+
+  const handleLoginClick = () => {
+    if (currentUserId) return;
+    navigate(ROUTES.LOGIN);
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
       <header className="border-b">
-        <div
-          className={cn(container, flexRowCenter, "h-15 justify-between px-4")}
-        >
+        <div className={cn(container, flexRowCenter, "h-15 justify-between")}>
           <Link to={ROUTES.HOME} className={cn(flexRowCenter, "gap-2")}>
             <img className="h-5" src={logo} alt="" />
             <h1 className="font-bold">민주 로그</h1>
@@ -31,6 +36,9 @@ export default function GlobalLayout() {
             <button className={headerActionButton} aria-label="테마 변경">
               <SunIcon className="h-6 w-6" />
             </button>
+            {!currentUserId && (
+              <Button onClick={handleLoginClick}>로그인</Button>
+            )}
             {currentUserId && (
               <Link
                 className={headerActionButton}
