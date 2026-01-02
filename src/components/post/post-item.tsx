@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { useOpenAlertModal } from "@/store/alert-modal";
 import AppLoader from "@/components/status/app-loader";
 import { useOpenEditPostEditorModal } from "../../store/post-editor-modal";
+import { TOAST_MESSAGES_POST } from "@/constants/toast-messages";
 
 export default function PostItem({ post }: { post: PostWithAuthor }) {
   const userId = useSessionUserId();
@@ -109,18 +110,18 @@ function EditPostButton({ post }: { post: PostWithAuthor }) {
 function DeletePostButton({ postId }: { postId: number }) {
   const openAlertModal = useOpenAlertModal();
   const { mutate: deletePost, isPending } = useDeletePost({
-    onError: (error) => {
-      toast.info(error.message);
-    },
     onSuccess: () => {
-      toast.info("게시물을 성공적으로 삭제하였습니다.");
+      toast.info(TOAST_MESSAGES_POST.DELETE.SUCCESS);
+    },
+    onError: () => {
+      toast.info(TOAST_MESSAGES_POST.DELETE.ERROR);
     },
   });
 
   const handleDeletePostClick = () => {
     openAlertModal({
       title: "게시물을 삭제하시겠습니까?",
-      description: "삭제하면 복구할 수 없습니다.",
+      description: "삭제된 게시물은 복구할 수 없습니다.",
       onAction: () => deletePost(postId),
     });
   };

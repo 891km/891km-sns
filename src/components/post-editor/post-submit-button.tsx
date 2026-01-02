@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { TOAST_MESSAGES_POST } from "@/constants/toast-messages";
 import { useCreatePost } from "@/hooks/mutations/post/use-create-post";
 import { useUpdatePost } from "@/hooks/mutations/post/use-update-post";
 import { usePostContent } from "@/provider/post-editor/post-content-provider";
@@ -15,20 +16,20 @@ export default function PostSubmitButton() {
   const { mutate: createPost } = useCreatePost({
     onSuccess: () => {
       closeModal();
-      toast.info("포스터를 성공적으로 게시하였습니다!");
+      toast.info(TOAST_MESSAGES_POST.CREATE.SUCCESS);
     },
     onError: () => {
-      toast.error("포스트 게시에 실패하였습니다.");
+      toast.error(TOAST_MESSAGES_POST.CREATE.ERROR);
     },
   });
 
   const { mutate: updatePost } = useUpdatePost({
     onSuccess: () => {
       closeModal();
-      toast.info("포스터를 성공적으로 수정하였습니다!");
+      toast.info(TOAST_MESSAGES_POST.UPDATE.SUCCESS);
     },
     onError: () => {
-      toast.error("포스트 수정에 실패하였습니다.");
+      toast.error(TOAST_MESSAGES_POST.UPDATE.ERROR);
     },
   });
 
