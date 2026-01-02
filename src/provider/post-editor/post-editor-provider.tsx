@@ -3,11 +3,9 @@ import { useUpdatePost } from "@/hooks/mutations/post/use-update-post";
 import { PostContentProvider } from "@/provider/post-editor/post-content-provider";
 import { PostImagesProvider } from "@/provider/post-editor/post-images-provider";
 import { usePostEditorModal } from "@/store/post-editor-modal";
-import { useSessionUserId } from "@/store/session";
 import { createContext, useContext, type ReactNode } from "react";
 
 type PostEditorContextValue = {
-  userId: string;
   postId: number;
   isModalOpen: boolean;
   isEdit: boolean;
@@ -26,7 +24,6 @@ export const usePostEditor = () => {
 };
 
 export function PostEditorProvider({ children }: { children: ReactNode }) {
-  const userId = useSessionUserId()!;
   const store = usePostEditorModal();
 
   const closeModal = () => {
@@ -46,7 +43,6 @@ export function PostEditorProvider({ children }: { children: ReactNode }) {
       <PostImagesProvider>
         <PostEditorContext.Provider
           value={{
-            userId,
             postId,
             isModalOpen,
             isEdit,

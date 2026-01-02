@@ -6,10 +6,12 @@ import { useUpdatePost } from "@/hooks/mutations/post/use-update-post";
 import { usePostContent } from "@/provider/post-editor/post-content-provider";
 import { usePostEditor } from "@/provider/post-editor/post-editor-provider";
 import { usePostImages } from "@/provider/post-editor/post-images-provider";
+import { useSessionUserId } from "@/store/session";
 import { toast } from "sonner";
 
 export default function PostSubmitButton() {
-  const { isEdit, userId, postId, isPending, closeModal } = usePostEditor();
+  const userId = useSessionUserId();
+  const { isEdit, postId, isPending, closeModal } = usePostEditor();
   const { content, isEmptyContent, isContentChanged } = usePostContent();
   const { imageItems } = usePostImages();
 

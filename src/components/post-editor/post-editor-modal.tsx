@@ -18,15 +18,17 @@ import PostSubmitButton from "@/components/post-editor/post-submit-button";
 import { usePostContent } from "@/provider/post-editor/post-content-provider";
 import { usePostImages } from "@/provider/post-editor/post-images-provider";
 import { usePostEditor } from "@/provider/post-editor/post-editor-provider";
+import { useSessionUserId } from "@/store/session";
 
 export default function PostEditorModal() {
+  const userId = useSessionUserId();
   const store = usePostEditorModal();
   const openAlertModal = useOpenAlertModal();
 
   const { setContent, isEmptyContent, isContentChanged } = usePostContent();
   const { imageItems, setImageItems } = usePostImages();
   const { isEmptyImages } = usePostImages();
-  const { userId, isModalOpen, isEdit, closeModal } = usePostEditor();
+  const { isModalOpen, isEdit, closeModal } = usePostEditor();
 
   const handleCloseModal = () => {
     if (isEdit && !isContentChanged) {
