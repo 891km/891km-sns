@@ -1,5 +1,5 @@
-import CreatePostButton from "@/components/post/create-post-button";
-import PostFeed from "@/components/post/post-feed";
+import CreatePostButton from "@/components/post-feed/create-post-button";
+import PostFeed from "@/components/post-feed/post-feed";
 
 export default function IndexPage() {
   return (

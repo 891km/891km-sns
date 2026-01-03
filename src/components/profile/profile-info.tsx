@@ -11,7 +11,7 @@ import ProfileAvatar from "@/components/profile/profile-avatar";
 
 interface BaseProfileInfoProps {
   authorId: string;
-  variant?: "default" | "post-edit";
+  variant?: "default" | "simple";
 }
 
 interface PostProfileInfoProps {
@@ -26,7 +26,7 @@ export default function ProfileInfo(props: ProfileInfoProps) {
   const { variant } = props;
 
   if (variant === "post") return <PostProfileInfo {...props} />;
-  if (variant === "post-edit") return <PostEditProfileInfo {...props} />;
+  if (variant === "simple") return <PostEditProfileInfo {...props} />;
   return <DefaultProfileInfo {...props} />;
 }
 

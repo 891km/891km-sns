@@ -1,4 +1,4 @@
-import PostFeed from "@/components/post/post-feed";
+import PostFeed from "@/components/post-feed/post-feed";
 import ProfileInfo from "@/components/profile/profile-info";
 import { ROUTES } from "@/constants/routes";
 import { useEffect } from "react";

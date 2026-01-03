@@ -15,5 +15,9 @@ export const QUERY_KEYS = {
 
 export const BUCKET_NAME = "uploads";
 
-export const POST_CONTENT_LENGTH_MAX = 180;
+export const POST_CONTENT_LENGTH_SHORT = 180;
+export const POST_CONTENT_LENGTH_MAX = 800;
+export const POST_COMMENT_LENGTH_MAX = 400;
 export const NICKNAME_LENGTH_MIN = 2;
+export const NICKNAME_LENGTH_MAX = 14;
+export const BIO_LENGTH_MIN = 180;
