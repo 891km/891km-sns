@@ -41,3 +41,11 @@ export function getLikeErrorMessageKo(error: unknown) {
   }
   return "좋아요 요청에 실패했습니다.";
 }
+
+export function getCommentErrorMessageKo(error: unknown) {
+  const commentError = error as { code?: string };
+  if (commentError.code === "42501") {
+    return "로그인 후 댓글을 작성할 수 있습니다.";
+  }
+  return "댓글 요청에 실패했습니다.";
+}

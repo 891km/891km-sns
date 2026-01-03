@@ -3,12 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { POST_COMMENT_LENGTH_MAX } from "@/constants/constants";
+import { ROUTES } from "@/constants/routes";
 import { TOAST_MESSAGES_COMMENT } from "@/constants/toast-messages";
 import { useCreateComment } from "@/hooks/mutations/comment/use-create-comment";
 import { useUpdateComment } from "@/hooks/mutations/comment/use-update-comment";
+import { getCommentErrorMessageKo } from "@/lib/error-code-ko";
 import { cn } from "@/lib/utils";
+import { useOpenAlertModal } from "@/store/alert-modal";
 import { useSessionUserId } from "@/store/session";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
 type CreateMode = {
@@ -37,6 +41,8 @@ export default function PostCommentEditor(props: CommentEditorProps) {
   const { type } = props;
 
   const userId = useSessionUserId();
+  const openAlertModal = useOpenAlertModal();
+  const navigate = useNavigate();
 
   const { mutate: createComment, isPending: isCreatePending } =
     useCreateComment({
@@ -44,8 +50,8 @@ export default function PostCommentEditor(props: CommentEditorProps) {
         setContent("");
         if (type === "REPLY") props.onClose();
       },
-      onError: () => {
-        toast.error(TOAST_MESSAGES_COMMENT.CREATE.ERROR);
+      onError: (error) => {
+        toast.error(getCommentErrorMessageKo(error));
       },
     });
 
@@ -96,13 +102,28 @@ export default function PostCommentEditor(props: CommentEditorProps) {
     });
   };
 
+  const handleGuestTextareaClick = () => {
+    if (userId) return;
+    openAlertModal({
+      title: "로그인이 필요한 서비스입니다.",
+      description: "로그인 화면으로 이동하시겠습니까?",
+      onAction: () => {
+        navigate(ROUTES.LOGIN);
+      },
+    });
+  };
+
   const isPending = isCreatePending || isUpdatePending;
   const isEmptyContent = !content.trim();
   const isEdited = type === "EDIT" && props.initialContent !== content;
 
   return (
     <div className={cn("flex w-full flex-col gap-3 pb-2")}>
-      {type === "CREATE" && <ProfileInfo variant="simple" authorId={userId!} />}
+      {userId ? (
+        type === "CREATE" && <ProfileInfo variant="simple" authorId={userId} />
+      ) : (
+        <ProfileInfo variant="guest" />
+      )}
       <Textarea
         ref={textareaRef}
         className={cn(
@@ -117,6 +138,7 @@ export default function PostCommentEditor(props: CommentEditorProps) {
         maxLength={POST_COMMENT_LENGTH_MAX}
         onChange={(e) => setContent(e.target.value)}
         disabled={isPending}
+        onClick={handleGuestTextareaClick}
       />
       <div className="flex justify-end gap-2">
         {type === "CREATE" && (

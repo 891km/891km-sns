@@ -20,13 +20,21 @@ interface PostProfileInfoProps {
   dateText: string;
 }
 
-type ProfileInfoProps = BaseProfileInfoProps | PostProfileInfoProps;
+interface GuestProfileInfoProps {
+  variant: "guest";
+}
+
+type ProfileInfoProps =
+  | BaseProfileInfoProps
+  | PostProfileInfoProps
+  | GuestProfileInfoProps;
 
 export default function ProfileInfo(props: ProfileInfoProps) {
   const { variant } = props;
 
+  if (variant === "guest") return <GuestProfileInfo />;
   if (variant === "post") return <PostProfileInfo {...props} />;
-  if (variant === "simple") return <PostEditProfileInfo {...props} />;
+  if (variant === "simple") return <SimpleProfileInfo {...props} />;
   return <DefaultProfileInfo {...props} />;
 }
 
@@ -58,7 +66,7 @@ function PostProfileInfo(props: PostProfileInfoProps) {
   );
 }
 
-function PostEditProfileInfo(props: BaseProfileInfoProps) {
+function SimpleProfileInfo(props: BaseProfileInfoProps) {
   const { authorId } = props;
   const { data: profile, error, isPending } = useFetchProfile(authorId);
   if (error) return <ErrorMessage />;
@@ -98,6 +106,18 @@ function DefaultProfileInfo(props: BaseProfileInfoProps) {
   );
 }
 
+function GuestProfileInfo() {
+  return (
+    <div className="flex flex-row items-center gap-3">
+      <ProfileAvatar src={null} />
+      <div className="flex flex-col items-center gap-2">
+        <div className="tex-sm font-medium">로그인 후 이용해 보세요</div>
+      </div>
+    </div>
+  );
+}
+
+// --- button
 function EditProfileButton() {
   const openProfileEditorModal = useOpenProfileEditorModal();
 
