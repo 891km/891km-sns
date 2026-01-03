@@ -16,7 +16,7 @@ export default function ProfileDetailPage() {
   }, []);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-7">
       <ProfileInfo authorId={authorId} />
       <div className="border-b"></div>
       <PostFeed authorId={authorId} />

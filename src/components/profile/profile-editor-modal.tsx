@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
+import { NICKNAME_LENGTH_MIN } from "@/constants/constants";
 import { TOAST_MESSAGES_PROFILE } from "@/constants/toast-messages";
 import { userUpdateProfile } from "@/hooks/mutations/profile/use-update-profile";
 import { cn } from "@/lib/utils";
@@ -146,7 +147,6 @@ export default function ProfileEditorModal() {
   }
 
   // --- variables
-  const NICKNAME_LENGTH_MIN = 2;
   const isNicknameChanged = profile?.nickname !== nickname;
   const isBioChanged = profile?.bio !== bio;
   const isAvatarChanged = avatarStatus !== "none";

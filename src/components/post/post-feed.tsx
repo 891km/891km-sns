@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 import ErrorMessage from "@/components/status/error-message";
 import Loader from "@/components/status/loader";
-import PostItem from "@/components/post/post-item";
+import PostItem from "@/components/post-item/post-item";
 
 export default function PostFeed({ authorId }: { authorId?: string }) {
   const {
@@ -25,7 +25,7 @@ export default function PostFeed({ authorId }: { authorId?: string }) {
   if (isPending) return <Loader />;
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-7">
         {postIds.pages.map((page) =>
           page.map((postId) => <PostItem key={postId} postId={postId} />),
         )}

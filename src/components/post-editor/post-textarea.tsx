@@ -1,3 +1,4 @@
+import { POST_CONTENT_LENGTH_MAX } from "@/constants/constants";
 import { cn } from "@/lib/utils";
 import { usePostContent } from "@/provider/post-editor/post-content-provider";
 import { usePostEditor } from "@/provider/post-editor/post-editor-provider";
@@ -7,7 +8,6 @@ export default function PostTextarea() {
   const { isModalOpen, isPending } = usePostEditor();
   const { content, setContent } = usePostContent();
 
-  const MAX_COTENT_LENGTH = 800;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -28,19 +28,19 @@ export default function PostTextarea() {
         placeholder="나누고 싶은 이야기가 있나요?"
         name="content"
         value={content}
-        maxLength={MAX_COTENT_LENGTH}
+        maxLength={POST_CONTENT_LENGTH_MAX}
         onChange={(e) => setContent(e.target.value)}
         disabled={isPending}
       />
       <span
         className={cn(
           "ml-auto text-sm",
-          content.length === MAX_COTENT_LENGTH
+          content.length === POST_CONTENT_LENGTH_MAX
             ? "text-red-400"
             : "text-muted-foreground",
         )}
       >
-        {content.length} / {MAX_COTENT_LENGTH}
+        {content.length} / {POST_CONTENT_LENGTH_MAX}
       </span>
     </div>
   );

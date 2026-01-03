@@ -83,7 +83,7 @@ function DefaultProfileInfo(props: BaseProfileInfoProps) {
   const isCurrentUser = userId === authorId;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-5 py-10">
+    <div className="flex flex-col items-center justify-center gap-5 py-6">
       <ProfileAvatar src={profile.avatar_image_url} size={30} />
       <div className="flex flex-col items-center gap-2">
         <div className="text-lg font-bold">{profile.nickname}</div>

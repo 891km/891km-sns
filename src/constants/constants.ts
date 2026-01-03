@@ -14,3 +14,6 @@ export const QUERY_KEYS = {
 };
 
 export const BUCKET_NAME = "uploads";
+
+export const POST_CONTENT_LENGTH_MAX = 180;
+export const NICKNAME_LENGTH_MIN = 2;
