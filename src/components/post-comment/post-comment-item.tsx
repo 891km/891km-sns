@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import ProfileInfo from "@/components/profile/profile-info";
 import { Button } from "@/components/ui/button";
-import type { CommentEntity } from "@/types/types";
+import type { NestedComment } from "@/types/types";
 import { formatTimeAgo } from "@/lib/time";
 import { useSessionUserId } from "@/store/session";
 import { useEffect, useState } from "react";
@@ -10,14 +10,26 @@ import { useDeleteComment } from "@/hooks/mutations/comment/use-delete-comment";
 import { toast } from "sonner";
 import { TOAST_MESSAGES_COMMENT } from "@/constants/toast-messages";
 import { useOpenAlertModal } from "@/store/alert-modal";
+import { cn } from "@/lib/utils";
 
 export default function PostCommentItem({
   comment,
 }: {
-  comment: CommentEntity;
+  comment: NestedComment;
 }) {
   const userId = useSessionUserId();
-  const { id, author_id, content, created_at } = comment;
+
+  const {
+    id,
+    author_id,
+    post_id,
+    parent_comment_id,
+    root_comment_id,
+    content,
+    created_at,
+    parentComment,
+    children: replyComments,
+  } = comment;
 
   const openAlertModal = useOpenAlertModal();
 
@@ -32,13 +44,19 @@ export default function PostCommentItem({
     });
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isReply, setIsReply] = useState(false);
 
   useEffect(() => {
     setIsEditing(false);
+    setIsReply(false);
   }, []);
 
+  const handleToggleReplyClick = () => {
+    setIsReply(!isReply);
+  };
+
   const handleEditCommentClick = () => {
-    toggleIsEditing();
+    setIsEditing(!isEditing);
   };
 
   const handleDeleteCommentClick = () => {
@@ -49,14 +67,17 @@ export default function PostCommentItem({
     });
   };
 
-  const toggleIsEditing = () => {
-    setIsEditing(!isEditing);
-  };
-
   const isCurrentUser = userId === author_id;
+  const isRootComment = root_comment_id === null;
+  const isOverTwoLevels = parent_comment_id !== root_comment_id;
 
   return (
-    <div className={"gap- flex flex-col pb-5 not-last:border-b"}>
+    <div
+      className={cn(
+        "flex flex-col pb-5 not-last:border-b",
+        !isRootComment && "border-none p-0",
+      )}
+    >
       <div className="flex justify-between">
         <div className="flex items-center gap-2">
           <Link to={"#"}>
@@ -94,15 +115,44 @@ export default function PostCommentItem({
             type="EDIT"
             commentId={id}
             initialContent={content}
-            onClose={toggleIsEditing}
+            onClose={handleEditCommentClick}
           />
         ) : (
-          <p className="whitespace-pre-line">{content}</p>
+          <div className="flex w-full flex-col gap-1">
+            {isOverTwoLevels && (
+              <p className="w-[80%] truncate text-sm text-blue-300">
+                ㄴ@{parentComment?.author.nickname}&nbsp;|&nbsp;
+                {parentComment?.content}
+              </p>
+            )}
+            <p className="whitespace-pre-line">{content}</p>
+          </div>
         )}
 
-        <Button variant="link" size="sm" className="text-muted-foreground p-0">
-          ㄴ 답글 달기
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-muted-foreground p-1.5 text-sm"
+          onClick={handleToggleReplyClick}
+        >
+          답글 달기
         </Button>
+        {isReply && (
+          <PostCommentEditor
+            type="REPLY"
+            postId={post_id}
+            parentCommentId={id}
+            rootCommentId={root_comment_id || id}
+            onClose={handleToggleReplyClick}
+          />
+        )}
+        {replyComments.length > 0 && (
+          <div className="flex w-full flex-col gap-4">
+            {replyComments.map((comment) => (
+              <PostCommentItem key={comment.id} comment={comment} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { updateComment } from "@/api/comment-api";
 import { QUERY_KEYS } from "@/constants/constants";
-import type { CommentEntity, UseMutationCallback } from "@/types/types";
+import type { CommentItem, UseMutationCallback } from "@/types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useUpdateComment = (callback?: UseMutationCallback) => {
@@ -12,7 +12,7 @@ export const useUpdateComment = (callback?: UseMutationCallback) => {
     onSuccess: (updatedComment) => {
       callback?.onSuccess?.();
 
-      queryClient.setQueryData<CommentEntity[]>(
+      queryClient.setQueryData<CommentItem[]>(
         QUERY_KEYS.comment.byPost(updatedComment.post_id),
         (comments) => {
           if (!comments)

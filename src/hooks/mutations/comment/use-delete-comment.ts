@@ -1,6 +1,6 @@
 import { deleteComment } from "@/api/comment-api";
 import { QUERY_KEYS } from "@/constants/constants";
-import type { CommentEntity, UseMutationCallback } from "@/types/types";
+import type { CommentItem, UseMutationCallback } from "@/types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useDeleteComment = (callback?: UseMutationCallback) => {
@@ -11,7 +11,7 @@ export const useDeleteComment = (callback?: UseMutationCallback) => {
     onError: (error) => callback?.onError?.(error),
     onSuccess: (deletedComment) => {
       (callback?.onSuccess?.(),
-        queryClient.setQueryData<CommentEntity[]>(
+        queryClient.setQueryData<CommentItem[]>(
           QUERY_KEYS.comment.byPost(deletedComment.post_id),
           (comments) => {
             if (!comments)

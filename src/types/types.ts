@@ -11,6 +11,15 @@ export type PostWithAuthor = PostEntity & {
 
 export type CommentEntity = Database["public"]["Tables"]["comment"]["Row"];
 
+export type CommentItem = CommentEntity & {
+  author: ProfileEntity;
+};
+
+export type NestedComment = CommentItem & {
+  parentComment?: CommentItem;
+  children: NestedComment[];
+};
+
 export type UseMutationCallback = {
   onSuccess?: () => void;
   onError?: (error: Error) => void;

@@ -23,7 +23,15 @@ type EditMode = {
   onClose: () => void;
 };
 
-type CommentEditorProps = CreateMode | EditMode;
+type ReplyMode = {
+  type: "REPLY";
+  postId: number;
+  parentCommentId: number;
+  rootCommentId: number;
+  onClose: () => void;
+};
+
+type CommentEditorProps = CreateMode | EditMode | ReplyMode;
 
 export default function PostCommentEditor(props: CommentEditorProps) {
   const { type } = props;
@@ -34,6 +42,7 @@ export default function PostCommentEditor(props: CommentEditorProps) {
     useCreateComment({
       onSuccess: () => {
         setContent("");
+        if (type === "REPLY") props.onClose();
       },
       onError: () => {
         toast.error(TOAST_MESSAGES_COMMENT.CREATE.ERROR);
@@ -62,8 +71,21 @@ export default function PostCommentEditor(props: CommentEditorProps) {
   }, []);
 
   const handleCreateCommentClick = () => {
-    if (isEmptyContent || type !== "CREATE") return;
-    createComment({ postId: props.postId, content });
+    if (isEmptyContent || type === "EDIT") return;
+
+    if (type === "CREATE") {
+      createComment({
+        postId: props.postId,
+        content,
+      });
+    } else if (type === "REPLY") {
+      createComment({
+        postId: props.postId,
+        content,
+        parentCommentId: props.parentCommentId,
+        rootCommentId: props.rootCommentId,
+      });
+    }
   };
 
   const handleEditCommentClick = () => {
@@ -84,10 +106,12 @@ export default function PostCommentEditor(props: CommentEditorProps) {
       <Textarea
         ref={textareaRef}
         className={cn(
-          "max-h-40 min-h-24 w-full resize-none bg-white p-3 text-sm whitespace-pre-line focus:outline-none md:text-base",
-          type === "EDIT" && "min-h-auto",
+          "max-h-40 min-h-22 w-full resize-none bg-white p-3 text-sm whitespace-pre-line focus:outline-none sm:text-base",
+          type !== "CREATE" && "min-h-auto",
         )}
-        placeholder="댓글을 남겨 보세요"
+        placeholder={
+          type === "REPLY" ? "답글을 남겨 보세요" : "댓글을 남겨 보세요"
+        }
         name="content"
         value={content}
         maxLength={POST_COMMENT_LENGTH_MAX}
@@ -95,7 +119,7 @@ export default function PostCommentEditor(props: CommentEditorProps) {
         disabled={isPending}
       />
       <div className="flex justify-end gap-2">
-        {type === "CREATE" ? (
+        {type === "CREATE" && (
           <Button
             variant="default"
             disabled={isCreatePending || isEmptyContent}
@@ -104,7 +128,18 @@ export default function PostCommentEditor(props: CommentEditorProps) {
             {isCreatePending && <Spinner />}
             작성
           </Button>
-        ) : (
+        )}
+        {type === "REPLY" && (
+          <Button
+            variant="outline"
+            disabled={isCreatePending || isEmptyContent}
+            onClick={handleCreateCommentClick}
+          >
+            {isCreatePending && <Spinner />}
+            작성
+          </Button>
+        )}
+        {type === "EDIT" && (
           <Button
             variant="outline"
             disabled={isUpdatePending || !isEdited}
