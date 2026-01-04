@@ -21,7 +21,7 @@ export default function ThemeButton() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
           size="icon"
