@@ -92,7 +92,11 @@ export default function PostItem({
           <PostTextContents post={post} type={type} />
         )}
         {post.image_urls && (
-          <PostImageContents postId={post.id} imageUrls={post.image_urls} />
+          <PostImageContents
+            postId={post.id}
+            type={type}
+            imageUrls={post.image_urls}
+          />
         )}
       </div>
 

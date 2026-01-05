@@ -12,7 +12,7 @@ import { useEffect } from "react";
 
 import { usePostEditorModal } from "@/store/post-editor-modal";
 import PostTextarea from "@/components/post-editor/post-textarea";
-import PostImagePreview from "@/components/post-editor/post-image-privew";
+import PostImagePreview from "@/components/post-editor/post-image-preview";
 import PostInputImageButton from "@/components/post-editor/post-input-image-button";
 import PostSubmitButton from "@/components/post-editor/post-submit-button";
 import { usePostContent } from "@/provider/post-editor/post-content-provider";

@@ -2,12 +2,19 @@ import PostCommentEditor from "@/components/post-comment/post-comment-editor";
 import PostCommentList from "@/components/post-comment/post-comment-list";
 import PostItem from "@/components/post-item/post-item";
 import { ROUTES } from "@/constants/routes";
+import { useEffect } from "react";
 import { Navigate, useParams } from "react-router";
 
 export default function PostDetailPage() {
   const params = useParams();
   const { postId } = params;
   if (!postId) return <Navigate to={ROUTES.HOME} />;
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+    });
+  }, []);
 
   return (
     <div className="flex flex-col gap-6">
