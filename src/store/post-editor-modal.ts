@@ -4,7 +4,7 @@ import { combine, devtools } from "zustand/middleware";
 type CreateMode = {
   isOpen: true;
   type: "CREATE";
-  isPending: boolean;
+  isPending?: boolean;
 };
 
 type EditMode = {
@@ -13,7 +13,7 @@ type EditMode = {
   postId: number;
   content: string;
   imageUrls: string[] | null;
-  isPending: boolean;
+  isPending?: boolean;
 };
 
 type OpenState = CreateMode | EditMode;
