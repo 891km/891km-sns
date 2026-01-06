@@ -1,6 +1,4 @@
 import { useFetchProfile } from "@/hooks/queries/use-fetch-profile";
-import ErrorMessage from "@/components/status/error-message";
-import Loader from "@/components/status/loader";
 import { ROUTES } from "@/constants/routes";
 import { Link } from "react-router";
 import { UserRoundPenIcon } from "lucide-react";
@@ -8,6 +6,7 @@ import { useSessionUserId } from "@/store/session";
 import { Button } from "@/components/ui/button";
 import { useOpenProfileEditorModal } from "@/store/profile-editor-modal";
 import ProfileAvatar from "@/components/profile/profile-avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface BaseProfileInfoProps {
   authorId: string;
@@ -43,8 +42,17 @@ function PostProfileInfo(props: PostProfileInfoProps) {
   const currentUserId = useSessionUserId();
   const { dateText, authorId } = props;
   const { data: profile, error, isPending } = useFetchProfile(authorId);
-  if (error) return <ErrorMessage />;
-  if (isPending) return <Loader />;
+
+  if (error || isPending)
+    return (
+      <div className="flex flex-row items-center gap-4">
+        <ProfileAvatar isPending={isPending} />
+        <div className="flex flex-col gap-1">
+          <Skeleton className="h-6 w-40" />
+          <Skeleton className="h-4 w-24" />
+        </div>
+      </div>
+    );
 
   return (
     <Link to={ROUTES.PROFILE_DETAIL.replace(":authorId", authorId)}>
@@ -69,8 +77,14 @@ function PostProfileInfo(props: PostProfileInfoProps) {
 function SimpleProfileInfo(props: BaseProfileInfoProps) {
   const { authorId } = props;
   const { data: profile, error, isPending } = useFetchProfile(authorId);
-  if (error) return <ErrorMessage />;
-  if (isPending) return <Loader />;
+
+  if (error || isPending)
+    return (
+      <div className="flex flex-row items-center gap-4">
+        <ProfileAvatar isPending={isPending} />
+        <Skeleton className="h-6 w-40" />
+      </div>
+    );
 
   return (
     <div className="flex flex-row items-center gap-3">
@@ -81,14 +95,34 @@ function SimpleProfileInfo(props: BaseProfileInfoProps) {
     </div>
   );
 }
+
 function DefaultProfileInfo(props: BaseProfileInfoProps) {
   const { authorId } = props;
   const userId = useSessionUserId();
+  const openProfileEditorModal = useOpenProfileEditorModal();
   const { data: profile, error, isPending } = useFetchProfile(authorId);
-  if (error) return <ErrorMessage />;
-  if (isPending) return <Loader />;
+
+  const handleEditProfileClick = () => {
+    openProfileEditorModal();
+  };
 
   const isCurrentUser = userId === authorId;
+
+  if (error || isPending)
+    return (
+      <div className="flex flex-col items-center justify-center gap-5 py-6">
+        <ProfileAvatar size={30} isPending={isPending} />
+        <div className="flex flex-col items-center gap-2">
+          <Skeleton className="h-7 w-44" />
+          <Skeleton className="h-6 w-30" />
+        </div>
+        {isCurrentUser && (
+          <Button variant="secondary" disabled={true}>
+            프로필 수정
+          </Button>
+        )}
+      </div>
+    );
 
   return (
     <div className="flex flex-col items-center justify-center gap-5 py-6">
@@ -101,7 +135,11 @@ function DefaultProfileInfo(props: BaseProfileInfoProps) {
           </p>
         )}
       </div>
-      {isCurrentUser && <EditProfileButton />}
+      {isCurrentUser && (
+        <Button variant="secondary" onClick={handleEditProfileClick}>
+          프로필 수정
+        </Button>
+      )}
     </div>
   );
 }
@@ -114,20 +152,5 @@ function GuestProfileInfo() {
         <div className="tex-sm font-medium">로그인 후 이용해 보세요</div>
       </div>
     </div>
-  );
-}
-
-// --- button
-function EditProfileButton() {
-  const openProfileEditorModal = useOpenProfileEditorModal();
-
-  const handleEditProfileClick = () => {
-    openProfileEditorModal();
-  };
-
-  return (
-    <Button variant="secondary" onClick={handleEditProfileClick}>
-      프로필 수정
-    </Button>
   );
 }
