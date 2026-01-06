@@ -116,9 +116,8 @@ export default function PostCommentEditor(props: CommentEditorProps) {
   const handleFocus = () => {
     textareaRef.current?.scrollIntoView({
       behavior: "smooth",
-      block: "start",
+      block: "center",
     });
-    console.log("제대로 되는건가요");
   };
 
   const isPending = isCreatePending || isUpdatePending;
