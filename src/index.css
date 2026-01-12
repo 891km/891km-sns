@@ -154,7 +154,3 @@
 textarea::selection {
   background-color: var(--color-green-300);
 }
-
-textarea:not(:focus)::selection {
-  background-color: var(--color-green-300);
-}

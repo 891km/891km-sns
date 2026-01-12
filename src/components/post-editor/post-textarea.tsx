@@ -76,6 +76,12 @@ export default function PostTextarea() {
       bubbles: true,
     });
     document.dispatchEvent(event);
+
+    setTimeout(() => {
+      if (textareaRef.current) {
+        textareaRef.current.setSelectionRange(end, end);
+      }
+    }, 0);
   };
 
   return (
