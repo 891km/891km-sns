@@ -107,7 +107,7 @@ export default function PostTextarea() {
               ref={overlapRef}
               className={cn(
                 "absolute inset-0 z-1",
-                "w-full resize-none whitespace-pre-line focus:outline-none sm:min-h-30",
+                "w-full resize-none whitespace-pre-wrap focus:outline-none sm:min-h-30",
                 "pointer-events-none",
               )}
             >
