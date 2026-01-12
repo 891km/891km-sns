@@ -70,7 +70,7 @@ export function normalizeContentMeta(meta: ContentMeta): ContentMeta {
   for (let i = 0; i < sorted.length; i++) {
     const next = sorted[i];
 
-    if (next.start <= current.end + 1) {
+    if (next.start < current.end) {
       current.end = Math.max(current.end, next.end);
     } else {
       normalizedMeta.push(current);
