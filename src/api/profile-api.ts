@@ -56,7 +56,7 @@ export async function updateProfile({
     .update({
       nickname,
       bio,
-      avatar_image_url: Boolean(avatarImageFile) ? newAvatarImageUrl : null,
+      avatar_image_url: newAvatarImageUrl,
     })
     .eq("id", userId)
     .select()
