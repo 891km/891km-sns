@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
 import { MessageSquareIcon } from "lucide-react";
 import { useNavigate } from "react-router";
 
@@ -12,7 +13,7 @@ export default function PostCommentButton({
   const navigate = useNavigate();
 
   const handleCommentClick = () => {
-    navigate(`post/${postId}`);
+    navigate(ROUTES.POST_DETAIL.replace(":postId", String(postId)));
   };
 
   return (
