@@ -78,82 +78,86 @@ export default function PostCommentItem({
         !isRootComment && "border-none p-0",
       )}
     >
-      <div className="flex justify-between">
-        <div className="flex items-center gap-2">
-          <Link to={"#"}>
-            <ProfileInfo authorId={author_id!} variant="simple" />
-          </Link>
-          <span className="text-muted-foreground text-sm">
-            {formatTimeAgo(created_at)}
-          </span>
-        </div>
-        {isCurrentUser && (
-          <div className="text-muted-foreground flex items-center">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="p-2"
-              onClick={handleEditCommentClick}
-            >
-              {isEditing ? "취소" : "수정"}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="p-2"
-              disabled={isEditing || isDeletePending}
-              onClick={handleDeleteCommentClick}
-            >
-              삭제
-            </Button>
+      <div>
+        <div className="flex justify-between">
+          <div className="flex items-center gap-2">
+            <Link to={"#"}>
+              <ProfileInfo authorId={author_id!} variant="simple" />
+            </Link>
+            <span className="text-muted-foreground text-sm whitespace-nowrap">
+              {formatTimeAgo(created_at)}
+            </span>
           </div>
-        )}
-      </div>
-      <div className="ml-14 flex flex-col items-start gap-2">
-        {isEditing ? (
-          <PostCommentEditor
-            type="EDIT"
-            commentId={id}
-            initialContent={content}
-            onClose={handleEditCommentClick}
-          />
-        ) : (
-          <div className="flex w-full flex-col gap-1">
+          {isCurrentUser && (
+            <div className="text-muted-foreground flex items-center">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="p-1.5 sm:p-2"
+                onClick={handleEditCommentClick}
+              >
+                {isEditing ? "취소" : "수정"}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="p-1.5 sm:p-2"
+                disabled={isEditing || isDeletePending}
+                onClick={handleDeleteCommentClick}
+              >
+                삭제
+              </Button>
+            </div>
+          )}
+        </div>
+        <div className="ml-14 flex flex-col items-start gap-2">
+          <div className="flex w-full flex-col gap-1.5">
             {isOverTwoLevels && (
-              <p className="w-[80%] truncate text-sm text-blue-300">
+              <p className="w-[90%] truncate text-sm text-blue-300 sm:w-[65%]">
                 ㄴ@{parentComment?.author.nickname}&nbsp;|&nbsp;
                 {parentComment?.content}
               </p>
             )}
-            <p className="whitespace-pre-line">{content}</p>
+            {isEditing ? (
+              <PostCommentEditor
+                type="EDIT"
+                commentId={id}
+                initialContent={content}
+                onClose={handleEditCommentClick}
+              />
+            ) : (
+              <p className="whitespace-pre-line">{content}</p>
+            )}
           </div>
-        )}
 
-        <Button
-          variant="ghost"
-          size="sm"
-          className="text-muted-foreground p-1.5 text-sm"
-          onClick={handleToggleReplyClick}
-        >
-          답글 달기
-        </Button>
-        {isReply && (
-          <PostCommentEditor
-            type="REPLY"
-            postId={post_id}
-            parentCommentId={id}
-            rootCommentId={root_comment_id || id}
-            onClose={handleToggleReplyClick}
-          />
-        )}
-        {replyComments.length > 0 && (
-          <div className="flex w-full flex-col gap-4">
-            {replyComments.map((comment) => (
-              <PostCommentItem key={comment.id} comment={comment} />
-            ))}
-          </div>
-        )}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground p-1.5 text-sm"
+            onClick={handleToggleReplyClick}
+          >
+            답글 달기
+          </Button>
+
+          {isReply && (
+            <PostCommentEditor
+              type="REPLY"
+              postId={post_id}
+              parentCommentId={id}
+              rootCommentId={root_comment_id || id}
+              onClose={handleToggleReplyClick}
+            />
+          )}
+        </div>
       </div>
+
+      {replyComments.length > 0 && (
+        <div className="mt-4 flex w-full flex-col gap-4 pl-4 sm:pl-14">
+          {replyComments.map((comment) => (
+            <PostCommentItem key={comment.id} comment={comment} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
