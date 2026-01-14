@@ -12,7 +12,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
-import { NICKNAME_LENGTH_MIN } from "@/constants/constants";
+import TextCounter from "@/components/ui/text-counter";
+import {
+  BIO_LENGTH_MAX,
+  NICKNAME_LENGTH_MAX,
+  NICKNAME_LENGTH_MIN,
+} from "@/constants/constants";
 import { TOAST_MESSAGES_PROFILE } from "@/constants/toast-messages";
 import { userUpdateProfile } from "@/hooks/mutations/profile/use-update-profile";
 import { cn } from "@/lib/utils";
@@ -119,8 +124,15 @@ export default function ProfileEditorModal() {
   };
 
   const handleEditProfileClick = () => {
-    if (isBlocked) {
-      toast.info(`닉네임은 최소 ${NICKNAME_LENGTH_MIN}자 이상 입력해 주세요.`);
+    if (!isNicknameValid) {
+      toast.info(
+        `닉네임은 ${NICKNAME_LENGTH_MIN}~${NICKNAME_LENGTH_MAX}자 이내로 입력해 주세요.`,
+      );
+      return;
+    }
+
+    if (!isBioValid) {
+      toast.info(`자기소개는 ${BIO_LENGTH_MAX}자 이내로 입력해 주세요.`);
       return;
     }
 
@@ -159,9 +171,12 @@ export default function ProfileEditorModal() {
   const isNicknameChanged = profile?.nickname !== nickname;
   const isBioChanged = profile?.bio !== bio;
   const isAvatarChanged = avatarStatus !== "none";
-
   const isChanged = isNicknameChanged || isBioChanged || isAvatarChanged;
-  const isBlocked = nickname.length < NICKNAME_LENGTH_MIN;
+
+  const isNicknameValid =
+    nickname.length >= NICKNAME_LENGTH_MIN &&
+    nickname.length <= NICKNAME_LENGTH_MAX;
+  const isBioValid = bio.length <= BIO_LENGTH_MAX;
 
   return (
     <Dialog open={isOpen} onOpenChange={handleCloseModal}>
@@ -239,13 +254,20 @@ export default function ProfileEditorModal() {
                 <Input
                   placeholder="닉네임"
                   value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
+                  onChange={(e) =>
+                    setNickname(e.target.value.slice(0, NICKNAME_LENGTH_MAX))
+                  }
                   className={cn(
                     "h-12 w-full text-base",
                     !isNicknameChanged && "text-muted-foreground",
                   )}
+                  maxLength={NICKNAME_LENGTH_MAX}
                 />
               </Label>
+              <TextCounter
+                current={nickname.length}
+                max={NICKNAME_LENGTH_MAX}
+              />
             </div>
 
             <div className="flex flex-col gap-2">
@@ -254,13 +276,17 @@ export default function ProfileEditorModal() {
                 <Input
                   placeholder="자기소개를 입력하세요"
                   value={bio}
-                  onChange={(e) => setBio(e.target.value)}
+                  onChange={(e) =>
+                    setBio(e.target.value.slice(0, BIO_LENGTH_MAX))
+                  }
                   className={cn(
                     "h-12 w-full text-base",
                     !isBioChanged && "text-muted-foreground",
                   )}
+                  maxLength={BIO_LENGTH_MAX}
                 />
               </Label>
+              <TextCounter current={bio.length} max={BIO_LENGTH_MAX} />
             </div>
           </div>
         </div>

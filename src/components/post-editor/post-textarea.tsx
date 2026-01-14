@@ -4,6 +4,7 @@ import {
   ContextMenuContent,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import TextCounter from "@/components/ui/text-counter";
 import { POST_CONTENT_LENGTH_MAX } from "@/constants/constants";
 import {
   adjustContentMeta,
@@ -129,16 +130,7 @@ export default function PostTextarea() {
           </Button>
         </ContextMenuContent>
       </ContextMenu>
-      <span
-        className={cn(
-          "ml-auto text-sm",
-          content.length === POST_CONTENT_LENGTH_MAX
-            ? "text-red-400"
-            : "text-muted-foreground",
-        )}
-      >
-        {content.length} / {POST_CONTENT_LENGTH_MAX}
-      </span>
+      <TextCounter current={content.length} max={POST_CONTENT_LENGTH_MAX} />
     </div>
   );
 }
